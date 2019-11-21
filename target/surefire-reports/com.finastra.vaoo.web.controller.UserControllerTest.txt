@@ -1,8 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.finastra.vaoo.web.controller.UserControllerTest
--------------------------------------------------------------------------------
-Tests run: 2, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 4.476 s <<< FAILURE! - in com.finastra.vaoo.web.controller.UserControllerTest
-testUserExists  Time elapsed: 1.584 s  <<< FAILURE!
-java.lang.AssertionError: Response content expected:<tom> but was:<{"id":"467e4ffc-4edf-46d9-9f3d-dc519b3ffba0","firstName":"tomer","lastName":"ab","phone":"1232131","email":"tomerabr@gmail.com","city":"tel aviv","country":"israel"}>
-	at com.finastra.vaoo.web.controller.UserControllerTest.testUserExists(UserControllerTest.java:37)
-
