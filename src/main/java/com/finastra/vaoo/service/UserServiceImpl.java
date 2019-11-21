@@ -4,7 +4,6 @@ import com.finastra.vaoo.domain.User;
 import com.finastra.vaoo.web.mappers.UserMapper;
 import com.finastra.vaoo.web.model.UserDto;
 import com.finastra.vaoo.repository.UserRepository;
-import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,11 +22,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserDto> getUser(UUID userId) {
-        return Optional.of(userMapper.userToUserDto(userRepository.findById(userId).get()));
+        return Optional.of(userMapper.toDto(userRepository.findById(userId).get()));
     }
 
     @Override
     public List<UserDto> getUsers() {
         return null;
+    }
+
+    @Override
+    public UserDto saveUser (UserDto userDto) {
+        User savedUser = userRepository.save(userMapper.toEntity(userDto));
+        return userMapper.toDto(savedUser);
+
     }
 }

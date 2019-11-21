@@ -2,10 +2,8 @@ package com.finastra.vaoo.web.controller;
 
 import com.finastra.vaoo.web.model.UserDto;
 import com.finastra.vaoo.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.UUID;
@@ -24,5 +22,11 @@ public class UserController {
     public UserDto getUser(@PathVariable UUID userId) {
         return userService.getUser(userId)
                 .orElseThrow(() -> new EntityNotFoundException(userId.toString()));
+    }
+
+    @PostMapping (consumes = MediaType.APPLICATION_JSON_VALUE )
+    public UserDto createUser(@RequestBody UserDto userDto) {
+        return userService.saveUser(userDto);
+
     }
 }
