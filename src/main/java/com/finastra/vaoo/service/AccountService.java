@@ -1,7 +1,14 @@
 package com.finastra.vaoo.service;
 
-import org.springframework.stereotype.Service;
+import com.finastra.vaoo.domain.Account;
+import com.finastra.vaoo.web.model.AccountDto;
 
-@Service
-public class AccountService {
+import java.util.List;
+import java.util.Optional;
+
+public interface AccountService {
+    Optional<AccountDto> getAccountById(long id);
+    AccountDto createAccount(Account account);
+    List<Account> getAccounts();
+    void deleteAccount(long id);
 }
