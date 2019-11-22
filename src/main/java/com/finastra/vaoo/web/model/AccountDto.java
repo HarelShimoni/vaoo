@@ -1,6 +1,7 @@
 package com.finastra.vaoo.web.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.finastra.vaoo.domain.account.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

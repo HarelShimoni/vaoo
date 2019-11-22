@@ -1,6 +1,6 @@
 package com.finastra.vaoo.service;
 
-import com.finastra.vaoo.domain.Account;
+import com.finastra.vaoo.domain.account.Account;
 import com.finastra.vaoo.repository.AccountRepository;
 import com.finastra.vaoo.web.mappers.AccountMapper;
 import com.finastra.vaoo.web.model.AccountDto;

@@ -1,13 +1,11 @@
-package com.finastra.vaoo.domain;
+package com.finastra.vaoo.domain.account;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -24,9 +22,10 @@ public class Account {
     String source;
 
     @NotNull
-    String status;
+    @Enumerated(EnumType.ORDINAL)
+    Status status;
 
-    public Account(String source, String status) {
+    public Account(String source, Status status) {
         this.source = source;
         this.status = status;
     }

@@ -1,11 +1,10 @@
 package com.finastra.vaoo.web.controller;
 
-import com.finastra.vaoo.domain.Account;
+import com.finastra.vaoo.domain.account.Account;
 import com.finastra.vaoo.service.AccountService;
 import com.finastra.vaoo.web.mappers.AccountMapper;
 import com.finastra.vaoo.web.model.AccountDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
