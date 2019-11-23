@@ -1,6 +1,7 @@
-package com.finastra.vaoo.web.model;
+package com.finastra.vaoo.web.model.account.source;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.finastra.vaoo.web.model.account.source.SourceDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,18 +13,13 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @Data
 @Builder
-public class AccountDto {
+public class WalletSourceDto extends SourceDto {
     @JsonProperty
     long id;
 
     @JsonProperty
-    SourceDto source;
+    String number;
 
     @JsonProperty
-    String status;
-
-    public AccountDto(SourceDto source, String status) {
-        this.source = source;
-        this.status = status;
-    }
+    String bdata;
 }

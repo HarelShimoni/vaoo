@@ -1,5 +1,6 @@
 package com.finastra.vaoo.domain.account;
 
+import com.finastra.vaoo.domain.account.source.Source;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

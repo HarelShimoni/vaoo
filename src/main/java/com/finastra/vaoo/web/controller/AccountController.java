@@ -1,9 +1,16 @@
 package com.finastra.vaoo.web.controller;
 
 import com.finastra.vaoo.domain.account.Account;
-import com.finastra.vaoo.service.AccountService;
-import com.finastra.vaoo.web.mappers.AccountMapper;
-import com.finastra.vaoo.web.model.AccountDto;
+import com.finastra.vaoo.domain.account.source.Source;
+import com.finastra.vaoo.service.account.AccountService;
+import com.finastra.vaoo.web.mappers.account.AccountMapper;
+import com.finastra.vaoo.web.mappers.account.source.WalletSourceMapper;
+import com.finastra.vaoo.web.mappers.account.source.BankSourceMapper;
+import com.finastra.vaoo.web.model.account.AccountDto;
+import com.finastra.vaoo.web.model.account.source.BankSourceDto;
+import com.finastra.vaoo.web.model.account.source.WalletSourceDto;
+import com.finastra.vaoo.web.model.account.source.SourceDto;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,4 +62,12 @@ public class AccountController {
         return ResponseEntity.status(ACCEPTED).build();
     }
 
+    @PostMapping("/test")
+    ResponseEntity<Source> testInheritance(@RequestBody SourceDto source){
+        if (source instanceof BankSourceDto) {
+            return  new ResponseEntity<>(Mappers.getMapper(BankSourceMapper.class).toEntity((BankSourceDto) source), OK);
+        } else {
+            return  new ResponseEntity<>(Mappers.getMapper(WalletSourceMapper.class).toEntity((WalletSourceDto) source), OK);
+        }
+    }
 }

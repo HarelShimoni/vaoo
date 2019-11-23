@@ -1,9 +1,9 @@
-package com.finastra.vaoo.service;
+package com.finastra.vaoo.service.account;
 
 import com.finastra.vaoo.domain.account.Account;
 import com.finastra.vaoo.repository.AccountRepository;
-import com.finastra.vaoo.web.mappers.AccountMapper;
-import com.finastra.vaoo.web.model.AccountDto;
+import com.finastra.vaoo.web.mappers.account.AccountMapper;
+import com.finastra.vaoo.web.model.account.AccountDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
