@@ -55,5 +55,4 @@ public class AccountController {
         return ResponseEntity.status(ACCEPTED).build();
     }
 
-
 }

@@ -9,25 +9,19 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Builder
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+//@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Account {
+public class Source {
     @Id
     @GeneratedValue
     long id;
 
-    @NotNull
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    Source source;
+    @OneToOne(mappedBy = "source")
+    Account account;
 
     @NotNull
-    @Enumerated(EnumType.ORDINAL)
-    Status status;
-
-    public Account(Source source, Status status) {
-        this.source = source;
-        this.status = status;
-    }
+    String number;
 }
