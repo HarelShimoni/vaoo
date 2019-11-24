@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,12 +20,12 @@ public class AccountDto {
     long id;
 
     @JsonProperty(required = true)
-    SourceDto source;
+    List<SourceDto> source;
 
     @JsonProperty(defaultValue = "NEW")
     String status;
 
-    public AccountDto(SourceDto source, String status) {
+    public AccountDto(List<SourceDto> source, String status) {
         this.source = source;
         this.status = status;
     }

@@ -15,6 +15,7 @@ public abstract class Source {
     long id;
 
     @SuppressWarnings({"unused", "for JPA usage"})
-    @OneToOne(mappedBy = "source")
+//    @OneToOne(mappedBy = "source")
+    @ManyToOne
     Account account;
 }
