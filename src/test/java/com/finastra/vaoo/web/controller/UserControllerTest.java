@@ -1,11 +1,13 @@
 package com.finastra.vaoo.web.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finastra.vaoo.domain.account.Account;
 import com.finastra.vaoo.domain.account.Status;
 import com.finastra.vaoo.domain.account.source.BankSource;
 import com.finastra.vaoo.domain.user.User;
 import com.finastra.vaoo.repository.UserRepository;
+import com.finastra.vaoo.web.mappers.user.UserMapper;
 import com.finastra.vaoo.web.model.user.UserDto;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -19,6 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.hamcrest.core.Is.is;
@@ -40,14 +44,17 @@ class UserControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
     UserRepository userRepo;
 
     @Test
     @DisplayName("Return user id it exists")
     void testUserExists() throws Exception {
-        UUID generatedId = createUser(UUID.randomUUID());
+        UUID generatedId = createUserInDb();
 
-        mockMvc.perform(get("/user/id/" + generatedId))
+        mockMvc.perform(get("/user/" + generatedId))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName",is("tomer")));
     }
@@ -57,11 +64,12 @@ class UserControllerTest {
     @DisplayName("Return not found response (400) in case user was not found in repository")
     void testUserIsMissing() throws Exception {
         UUID uuid = UUID.randomUUID();
-        mockMvc.perform(get("/user/id/" + uuid))
+        mockMvc.perform(get("/user/" + uuid))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
                 .andExpect(content().string("Entity was not found"));
+
     }
 
     @Test
@@ -70,7 +78,6 @@ class UserControllerTest {
     void createUser() throws Exception {
         //arrange
         UserDto userDto = UserDto.builder()
-                .id(UUID.randomUUID())
                 .firstName("tomer")
                 .lastName("ab")
                 .city("sda")
@@ -88,11 +95,31 @@ class UserControllerTest {
 
     @Test
     @Disabled
+    @DisplayName("test update user")
+    void updateUser() throws Exception {
+        //arrange
+        User userInDb = createUserInDbForUpdate();
+
+        UserDto userDto = userMapper.toDto(userInDb);
+
+        userDto.setCity("Haifa");
+
+        //act and assert
+        mockMvc.perform(put("/user")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(userDto)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.city",is("Haifa")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName",is("tomer"))); //ensure existing value not changed
+    }
+
+    @Test
+    @Disabled
     @DisplayName("delete user")
     void deleteUser() throws Exception {
         //arrange
-        UUID userId = createUser(UUID.randomUUID());
-        String uri = "/user/id/" + userId;
+        UUID userId = createUserInDb();
+        String uri = "/user/" + userId;
 
         //act
         mockMvc.perform(get(uri)).andExpect(status().isOk()); //check user was created
@@ -102,7 +129,66 @@ class UserControllerTest {
         mockMvc.perform(get(uri)).andExpect(status().isNotFound());
     }
 
-    private UUID createUser(UUID userId) {
+
+
+    @Test
+    @Disabled
+    @DisplayName("login")
+    void loginIsSuccesful () throws Exception {
+        UUID userId = createUserInDb();
+        String uri = "/user/login/";
+
+        Map<String,String> loginDetails = new HashMap<>();
+        loginDetails.put("userId",userId.toString());
+        loginDetails.put("password","mypass");
+
+        mockMvc.perform(post(uri)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(loginDetails)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.authenticated").value("true"));
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("login failed")
+    void loginFailedDueToPasswordMismatch () throws Exception {
+        UUID userId = createUserInDb();
+        String uri = "/user/login/";
+
+        Map<String,String> loginDetails = new HashMap<>();
+        loginDetails.put("userId",userId.toString());
+        loginDetails.put("password","incorrectPass");
+
+        mockMvc.perform(post(uri)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(loginDetails)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.authenticated").value("false"));
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("login failed")
+    void loginFailedDueToNonExistingUser () throws Exception {
+        String uri = "/user/login/";
+
+        Map<String,String> loginDetails = new HashMap<>();
+        loginDetails.put("userId",UUID.randomUUID().toString());
+        loginDetails.put("password","incorrectPass");
+
+        mockMvc.perform(post(uri)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(loginDetails)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.authenticated").value("false"));
+    }
+
+
+
+
+
+    private UUID createUserInDb() {
         BankSource hsbc = BankSource.builder()
                 .accountNumber("123")
                 .bank("hsbc")
@@ -111,8 +197,10 @@ class UserControllerTest {
 
         User user = userRepo.save((User.builder()
                 .firstName("tomer")
+                .lastName("ab")
                 .email("tomer@erewrwe.com")
                 .accounts(Arrays.asList(new Account(0, hsbc, Status.NEW)))
+                .password("mypass")
                 .phone("12312312")
                 .city("neta")
                 .country("israel")
@@ -120,6 +208,29 @@ class UserControllerTest {
 
 
         return user.getId();
+    }
+
+
+    private User createUserInDbForUpdate() {
+        BankSource hsbc = BankSource.builder()
+                .accountNumber("123")
+                .bank("hsbc")
+                .branch("1232")
+                .build();
+
+        User user = userRepo.save((User.builder()
+                .firstName("tomer")
+                .lastName("ab")
+                .email("tomer@erewrwe.com")
+                .accounts(Arrays.asList(new Account(0, hsbc, Status.NEW)))
+                .password("mypass")
+                .phone("12312312")
+                .city("neta")
+                .country("israel")
+                .build()));
+
+
+        return user;
     }
 
 
