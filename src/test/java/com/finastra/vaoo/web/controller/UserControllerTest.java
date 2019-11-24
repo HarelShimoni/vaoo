@@ -25,7 +25,10 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.core.Is.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -62,9 +65,14 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("Throw exception is user  doesnt exist")
-    void testUserIsMissing() {
-
+    @DisplayName("Return not found response (400) in case user was not found in repository")
+    void testUserIsMissing() throws Exception {
+        UUID uuid = UUID.randomUUID();
+        mockMvc.perform(get("/user/id/" + uuid))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(content().string("Entity was not found"));
     }
 
     @Test
