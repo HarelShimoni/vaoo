@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserDto> getUser(UUID userId) {
-        return Optional.of(userMapper.toDto(userRepository.findById(userId).get()));
+        return userRepository.findById(userId).map(user -> userMapper.toDto(user));
     }
 
     @Override
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto saveUser (UserDto userDto) {
+    public UserDto createUser(UserDto userDto) {
         User savedUser = userRepository.save(userMapper.toEntity(userDto));
         return userMapper.toDto(savedUser);
 
