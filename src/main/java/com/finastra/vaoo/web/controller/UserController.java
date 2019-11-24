@@ -20,10 +20,10 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/id/{userId}")
-    public ResponseEntity<UserDto> getUser(@PathVariable UUID userId) {
-        return new ResponseEntity<>(userService.getUser(userId)
-                .orElseThrow(() -> new EntityNotFoundException(userId.toString())), HttpStatus.OK);
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> getUser(@PathVariable UUID id) {
+        return new ResponseEntity<>(userService.getUser(id)
+                .orElseThrow(() -> new EntityNotFoundException(id.toString())), HttpStatus.OK);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

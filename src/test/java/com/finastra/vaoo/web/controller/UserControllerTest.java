@@ -47,7 +47,7 @@ class UserControllerTest {
     void testUserExists() throws Exception {
         UUID generatedId = createUser(UUID.randomUUID());
 
-        mockMvc.perform(get("/user/id/" + generatedId))
+        mockMvc.perform(get("/user/" + generatedId))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName",is("tomer")));
     }
@@ -62,6 +62,7 @@ class UserControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
                 .andExpect(content().string("Entity was not found"));
+
     }
 
     @Test
@@ -91,7 +92,7 @@ class UserControllerTest {
     void deleteUser() throws Exception {
         //arrange
         UUID userId = createUser(UUID.randomUUID());
-        String uri = "/user/id/" + userId;
+        String uri = "/user/" + userId;
 
         //act
         mockMvc.perform(get(uri)).andExpect(status().isOk()); //check user was created
