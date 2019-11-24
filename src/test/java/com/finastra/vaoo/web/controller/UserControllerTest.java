@@ -7,6 +7,7 @@ import com.finastra.vaoo.domain.account.source.BankSource;
 import com.finastra.vaoo.domain.user.User;
 import com.finastra.vaoo.repository.UserRepository;
 import com.finastra.vaoo.web.model.user.UserDto;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,7 @@ class UserControllerTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("Return not found response (400) in case user was not found in repository")
     void testUserIsMissing() throws Exception {
         UUID uuid = UUID.randomUUID();
@@ -63,6 +65,7 @@ class UserControllerTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("test create user")
     void createUser() throws Exception {
         //arrange
@@ -84,6 +87,7 @@ class UserControllerTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("delete user")
     void deleteUser() throws Exception {
         //arrange
