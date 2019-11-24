@@ -13,7 +13,8 @@ import org.springframework.stereotype.Component;
         property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = BankSourceDto.class, name = "bank"),
-        @JsonSubTypes.Type(value = WalletSourceDto.class, name = "wallet")
+        @JsonSubTypes.Type(value = WalletSourceDto.class, name = "wallet"),
+        @JsonSubTypes.Type(value = CCSourceDto.class, name = "cc")
 })
 public abstract class SourceDto {
 }
