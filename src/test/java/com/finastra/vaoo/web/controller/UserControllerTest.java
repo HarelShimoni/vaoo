@@ -70,7 +70,6 @@ class UserControllerTest {
     void createUser() throws Exception {
         //arrange
         UserDto userDto = UserDto.builder()
-                .id(UUID.randomUUID())
                 .firstName("tomer")
                 .lastName("ab")
                 .city("sda")
