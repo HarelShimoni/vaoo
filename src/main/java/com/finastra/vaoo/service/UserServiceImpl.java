@@ -36,4 +36,9 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(savedUser);
 
     }
+
+    @Override
+    public void deleteUser(UUID userId) {
+        userRepository.deleteById(userId);
+    }
 }

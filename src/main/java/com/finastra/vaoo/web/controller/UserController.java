@@ -29,6 +29,11 @@ public class UserController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
         return new ResponseEntity<>(userService.createUser(userDto), HttpStatus.CREATED);
+    }
 
+    @DeleteMapping("/id/{userId}")
+    public ResponseEntity deleteUser(@PathVariable UUID userId) {
+        userService.deleteUser(userId);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
