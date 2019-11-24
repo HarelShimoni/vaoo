@@ -1,8 +1,8 @@
-package com.finastra.vaoo.service;
+package com.finastra.vaoo.service.user;
 
-import com.finastra.vaoo.domain.User;
-import com.finastra.vaoo.web.mappers.UserMapper;
-import com.finastra.vaoo.web.model.UserDto;
+import com.finastra.vaoo.domain.user.User;
+import com.finastra.vaoo.web.mappers.user.UserMapper;
+import com.finastra.vaoo.web.model.user.UserDto;
 import com.finastra.vaoo.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -35,5 +35,10 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(userMapper.toEntity(userDto));
         return userMapper.toDto(savedUser);
 
+    }
+
+    @Override
+    public void deleteUser(UUID userId) {
+        userRepository.deleteById(userId);
     }
 }
