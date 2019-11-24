@@ -1,4 +1,4 @@
-package com.finastra.vaoo.domain;
+package com.finastra.vaoo.domain.user;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;

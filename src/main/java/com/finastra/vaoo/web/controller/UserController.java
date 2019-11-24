@@ -1,7 +1,7 @@
 package com.finastra.vaoo.web.controller;
 
-import com.finastra.vaoo.service.UserService;
-import com.finastra.vaoo.web.model.UserDto;
+import com.finastra.vaoo.service.user.UserService;
+import com.finastra.vaoo.web.model.user.UserDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

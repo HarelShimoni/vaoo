@@ -1,4 +1,4 @@
-package com.finastra.vaoo.web.model;
+package com.finastra.vaoo.web.model.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
