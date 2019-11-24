@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +28,21 @@ public class User {
     @OneToMany (cascade = CascadeType.ALL)
     private List<Account> accounts = new ArrayList<>();
 
+    @NotNull
     private String firstName;
+
+    @NotNull
     private String lastName;
+    @NotNull
     private String phone;
+
+    @NotNull
+    @Email
     private String email;
+
+    @NotNull
     private String city;
+
+    @NotNull
     private String country;
 }

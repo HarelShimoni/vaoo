@@ -1,9 +1,9 @@
 package com.finastra.vaoo.service.user;
 
 import com.finastra.vaoo.domain.user.User;
+import com.finastra.vaoo.repository.UserRepository;
 import com.finastra.vaoo.web.mappers.user.UserMapper;
 import com.finastra.vaoo.web.model.user.UserDto;
-import com.finastra.vaoo.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,6 +34,14 @@ public class UserServiceImpl implements UserService {
     public UserDto createUser(UserDto userDto) {
         User savedUser = userRepository.save(userMapper.toEntity(userDto));
         return userMapper.toDto(savedUser);
+
+    }
+
+    @Override
+    public UserDto updateUser(UserDto userDto) {
+        User user = userMapper.toEntity(userDto);
+        return userMapper.toDto(userRepository.save(user));
+
 
     }
 
