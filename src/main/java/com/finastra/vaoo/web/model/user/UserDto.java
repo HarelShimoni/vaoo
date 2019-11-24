@@ -1,16 +1,15 @@
 package com.finastra.vaoo.web.model.user;
 
+import com.finastra.vaoo.web.model.account.AccountDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -27,6 +26,10 @@ public class UserDto {
     private String firstName;
     @NotNull
     private String lastName;
+
+    @NotNull
+    List<AccountDto> accounts;
+
     @NotNull
     private String phone;
     @Email

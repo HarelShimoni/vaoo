@@ -1,8 +1,12 @@
 package com.finastra.vaoo.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.finastra.vaoo.domain.account.Account;
+import com.finastra.vaoo.domain.account.Status;
+import com.finastra.vaoo.domain.account.source.BankSource;
 import com.finastra.vaoo.domain.user.User;
 import com.finastra.vaoo.repository.UserRepository;
+import com.finastra.vaoo.web.model.account.AccountDto;
 import com.finastra.vaoo.web.model.user.UserDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,10 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.util.NestedServletException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
@@ -23,7 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class UserControllerTestIT {
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+
+class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -44,14 +53,7 @@ class UserControllerTestIT {
     @Test
     @DisplayName("Return user id it exists")
     void testUserExists() throws Exception {
-        User user = userRepo.save((User.builder()
-                .firstName("tomer")
-                .email("tomer@erewrwe.com")
-                .phone("12312312")
-                .city("neta")
-                .country("israel")
-                .build()));
-        UUID generatedId = user.getId();
+        UUID generatedId = createUser(UUID.randomUUID());
 
         mockMvc.perform(get("/user/id/" + generatedId))
                 .andExpect(status().isOk())
@@ -103,16 +105,23 @@ class UserControllerTestIT {
     }
 
     private UUID createUser(UUID userId) {
+        BankSource hsbc = BankSource.builder()
+                .accountNumber("123")
+                .bank("hsbc")
+                .branch("1232")
+                .build();
+
         User user = userRepo.save((User.builder()
                 .firstName("tomer")
                 .email("tomer@erewrwe.com")
+                .accounts(Arrays.asList(new Account(0, hsbc, Status.NEW)))
                 .phone("12312312")
                 .city("neta")
                 .country("israel")
                 .build()));
 
-        return user.getId();
 
+        return user.getId();
     }
 
 
