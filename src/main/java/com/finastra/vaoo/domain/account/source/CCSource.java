@@ -22,7 +22,7 @@ public class CCSource extends Source {
     long id;
 
     @NotNull
-    @Pattern(regexp = "^\\d{16}")
+    @Pattern(regexp = "^(\\d\\s*){16}")
     String ccNumber;
 
     @NotNull
@@ -44,7 +44,7 @@ public class CCSource extends Source {
     }
 
     public CCSource(long id, String ccNumber, CCProvider provider, Date expirationDate) {
-        this.ccNumber = ccNumber;
+        this.ccNumber = ccNumber.replaceAll("\\s+", "");
         this.provider = provider;
         setExpirationDate(expirationDate);
     }
