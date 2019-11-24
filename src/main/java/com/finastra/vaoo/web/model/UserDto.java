@@ -20,8 +20,6 @@ import java.util.UUID;
 @Builder
 public class UserDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @NotNull
     private UUID id;
 

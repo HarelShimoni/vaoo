@@ -3,6 +3,7 @@ package com.finastra.vaoo.web.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finastra.vaoo.domain.User;
 import com.finastra.vaoo.repository.UserRepository;
+import com.finastra.vaoo.service.UserService;
 import com.finastra.vaoo.web.model.UserDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 import static org.hamcrest.core.Is.is;
@@ -31,14 +33,21 @@ class UserControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    UserRepository userRepository;
+    UserRepository userRepo;
 
     @Test
     @DisplayName("Return user id it exists")
     void testUserExists() throws Exception {
-        UUID userId = UUID.randomUUID();
-        userRepository.save((new User(userId,"tomer","ab","1232131","tomerabr@gmail.com","tel aviv","israel")));
-        mockMvc.perform(get("/user/id/" + userId))
+        User user = userRepo.save((User.builder()
+                .firstName("tomer")
+                .email("tomer@erewrwe.com")
+                .phone("12312312")
+                .city("neta")
+                .country("israel")
+                .build()));
+        UUID generatedId = user.getId();
+
+        mockMvc.perform(get("/user/id/" + generatedId))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName",is("tomer")));
 
