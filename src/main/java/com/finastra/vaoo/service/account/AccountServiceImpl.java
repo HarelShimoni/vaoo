@@ -31,9 +31,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Account> getAccounts() {
-        List<Account> accounts = new ArrayList<>();
-        accountRepository.findAll().forEach(accounts::add);
+    public List<AccountDto> getAccounts() {
+        List<AccountDto> accounts = new ArrayList<>();
+        accountRepository.findAll().forEach(acc -> accounts.add(accountMapper.toDto(acc)));
         return accounts;
     }
 

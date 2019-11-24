@@ -33,12 +33,9 @@ public class AccountController {
 
     @GetMapping({"/", ""})
     public ResponseEntity<List<AccountDto>> getAccountById() {
-        List<Account> accounts = accountService.getAccounts();
+        List<AccountDto> accounts = accountService.getAccounts();
         if (!accounts.isEmpty()){
-            return new ResponseEntity<>(accounts
-                    .stream()
-                    .map(ac -> getMapper(AccountMapper.class).toDto(ac))
-                    .collect(Collectors.toList()), OK);
+            return new ResponseEntity<>(accounts, OK);
         } else {
             throw new NoSuchElementException("There're no accounts in db");
         }

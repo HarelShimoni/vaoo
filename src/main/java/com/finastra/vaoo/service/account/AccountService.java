@@ -11,7 +11,7 @@ public interface AccountService {
 
     AccountDto createAccount(Account account);
 
-    List<Account> getAccounts();
+    List<AccountDto> getAccounts();
 
     void deleteAccount(long id);
 }
