@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Component
@@ -20,13 +21,13 @@ public class AccountDto {
     long id;
 
     @JsonProperty(required = true)
-    List<SourceDto> source;
+    List<SourceDto> sources = new LinkedList<>();
 
     @JsonProperty(defaultValue = "NEW")
     String status;
 
-    public AccountDto(List<SourceDto> source, String status) {
-        this.source = source;
+    public AccountDto(List<SourceDto> sources, String status) {
+        this.sources = sources;
         this.status = status;
     }
 }

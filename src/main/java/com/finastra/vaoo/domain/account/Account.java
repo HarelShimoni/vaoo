@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -22,15 +23,15 @@ public class Account {
 
     @NotNull
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    List<Source> source;
+    List<Source> sources = new LinkedList<>();
 
     @NotNull
     @Enumerated(EnumType.ORDINAL)
     Status status;
 
     @SuppressWarnings({"unused", "for serializing"})
-    public Account(List<Source> source, Status status) {
-        this.source = source;
+    public Account(List<Source> sources, Status status) {
+        this.sources = sources;
         this.status = status;
     }
 }
