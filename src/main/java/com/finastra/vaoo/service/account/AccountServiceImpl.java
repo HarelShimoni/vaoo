@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AccountServiceImpl implements AccountService{
+public class AccountServiceImpl implements AccountService {
 
     @Autowired
     AccountRepository accountRepository;
@@ -21,12 +21,12 @@ public class AccountServiceImpl implements AccountService{
     AccountMapper accountMapper;
 
     @Override
-    public Optional<AccountDto> getAccountById(long id){
+    public Optional<AccountDto> getAccountById(long id) {
         return accountRepository.findById(id).map(ac -> accountMapper.toDto(ac));
     }
 
     @Override
-    public AccountDto createAccount(Account account){
+    public AccountDto createAccount(Account account) {
         return accountMapper.toDto(accountRepository.save(account));
     }
 

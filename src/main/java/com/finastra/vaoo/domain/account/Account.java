@@ -27,6 +27,7 @@ public class Account {
     @Enumerated(EnumType.ORDINAL)
     Status status;
 
+    @SuppressWarnings({"unused", "for serializing"})
     public Account(Source source, Status status) {
         this.source = source;
         this.status = status;

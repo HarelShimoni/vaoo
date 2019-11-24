@@ -1,8 +1,6 @@
 package com.finastra.vaoo.domain.account.source;
 
 import com.finastra.vaoo.domain.account.Account;
-import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -13,8 +11,10 @@ import javax.persistence.*;
 public abstract class Source {
     @Id
     @GeneratedValue
+    @SuppressWarnings({"unused", "I have to keep it here, cause I cannot use a @MappedSuperclass"})
     long id;
 
+    @SuppressWarnings({"unused", "for JPA usage"})
     @OneToOne(mappedBy = "source")
     Account account;
 }

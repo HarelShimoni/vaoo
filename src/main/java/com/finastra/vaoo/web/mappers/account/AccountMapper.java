@@ -27,12 +27,14 @@ public interface AccountMapper {
         return string == null ? null : Status.valueOf(string.toUpperCase());
     }
 
+    @SuppressWarnings("unchecked")
     default <T extends SourceDto, E extends Source> E toEntity(T sourceDto){
         if (sourceDto instanceof BankSourceDto) return (E)Mappers.getMapper(BankSourceMapper.class).toEntity((BankSourceDto)sourceDto);
         if (sourceDto instanceof WalletSourceDto) return (E)Mappers.getMapper(WalletSourceMapper.class).toEntity((WalletSourceDto)sourceDto);
         throw new RuntimeException();
     }
 
+    @SuppressWarnings("unchecked")
     default <T extends Source, E extends SourceDto> E toDto(T source) {
         if (source instanceof BankSource) return (E)Mappers.getMapper(BankSourceMapper.class).toDto((BankSource)source);
         if (source instanceof WalletSource) return (E)Mappers.getMapper(WalletSourceMapper.class).toDto((WalletSource)source);

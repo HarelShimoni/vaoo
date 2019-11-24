@@ -16,10 +16,15 @@ public class BankSourceDto extends SourceDto {
     @JsonProperty
     long id;
 
+    @JsonProperty(required = true)
+    String accountNumber;
 
-    @JsonProperty
-    String number;
+    @JsonProperty(required = true)
+    String bank;
 
-    @JsonProperty
-    String adata;
+    @JsonProperty(required = true)
+    String branch;
+
+    @JsonProperty(value = "IBAN")
+    String iban;
 }

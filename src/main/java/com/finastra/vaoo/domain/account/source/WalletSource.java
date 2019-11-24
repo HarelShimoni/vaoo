@@ -5,10 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -18,7 +16,14 @@ import javax.persistence.InheritanceType;
 @Data
 public class WalletSource extends Source {
     @Id
+    @GeneratedValue
     long id;
-    String number;
-    String bdata;
+
+    @NotNull
+    @Enumerated(EnumType.ORDINAL)
+    WalletProvider walletProvider;
+
+    @NotNull
+    String walletNumber;
+
 }

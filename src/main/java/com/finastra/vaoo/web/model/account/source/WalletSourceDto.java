@@ -1,7 +1,6 @@
 package com.finastra.vaoo.web.model.account.source;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.finastra.vaoo.web.model.account.source.SourceDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,8 +17,8 @@ public class WalletSourceDto extends SourceDto {
     long id;
 
     @JsonProperty
-    String number;
+    String walletNumber;
 
     @JsonProperty
-    String bdata;
+    String walletProvider;
 }

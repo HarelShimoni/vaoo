@@ -17,10 +17,10 @@ public class AccountDto {
     @JsonProperty
     long id;
 
-    @JsonProperty
+    @JsonProperty(required = true)
     SourceDto source;
 
-    @JsonProperty
+    @JsonProperty(defaultValue = "NEW")
     String status;
 
     public AccountDto(SourceDto source, String status) {

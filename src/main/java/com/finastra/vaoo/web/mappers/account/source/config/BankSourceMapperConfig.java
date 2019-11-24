@@ -1,4 +1,4 @@
-package com.finastra.vaoo.web.mappers.account.source;
+package com.finastra.vaoo.web.mappers.account.source.config;
 
 import com.finastra.vaoo.domain.account.source.BankSource;
 import com.finastra.vaoo.web.model.account.source.BankSourceDto;
