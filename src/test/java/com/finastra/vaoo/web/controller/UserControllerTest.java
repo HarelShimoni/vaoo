@@ -6,7 +6,6 @@ import com.finastra.vaoo.domain.account.Status;
 import com.finastra.vaoo.domain.account.source.BankSource;
 import com.finastra.vaoo.domain.user.User;
 import com.finastra.vaoo.repository.UserRepository;
-import com.finastra.vaoo.web.model.account.AccountDto;
 import com.finastra.vaoo.web.model.user.UserDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,16 +16,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.util.NestedServletException;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.core.Is.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,13 +41,6 @@ class UserControllerTest {
     @Autowired
     UserRepository userRepo;
 
-//    @BeforeEach
-//    public void beforeTest() {
-//        MockMvc mockMvc = standaloneSetup(UserController.class)
-//                .setHandlerExceptionResolvers(createExceptionResolver())
-//                .build();
-//    }
-
     @Test
     @DisplayName("Return user id it exists")
     void testUserExists() throws Exception {
@@ -61,7 +49,6 @@ class UserControllerTest {
         mockMvc.perform(get("/user/id/" + generatedId))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName",is("tomer")));
-
     }
 
     @Test
@@ -108,8 +95,7 @@ class UserControllerTest {
         mockMvc.perform(delete(uri)).andExpect(status().isOk()); //delete the user
 
         //assert
-        //mockMvc.perform(get(uri)).andExpect(status().isNotFound()); //to enable after exception controller branch is merged
-        assertThatThrownBy(() -> mockMvc.perform(get(uri)).andReturn()).isExactlyInstanceOf(NestedServletException.class); //sloppy, temp solution
+        mockMvc.perform(get(uri)).andExpect(status().isNotFound());
     }
 
     private UUID createUser(UUID userId) {
@@ -133,15 +119,5 @@ class UserControllerTest {
     }
 
 
-//    //to enable once "exception controller" branch is merged
-//    private ExceptionHandlerExceptionResolver createExceptionResolver() {
-//        ExceptionHandlerExceptionResolver exceptionResolver = new ExceptionHandlerExceptionResolver() {
-//            protected ServletInvocableHandlerMethod getExceptionHandlerMethod(HandlerMethod handlerMethod, Exception exception) {
-//                Method method = new ExceptionHandlerMethodResolver(RestExceptionController.class).resolveMethod(exception);
-//                return new ServletInvocableHandlerMethod(new RestExceptionController(), method);
-//            }
-//        };
-//        exceptionResolver.afterPropertiesSet();
-//        return exceptionResolver;
-//    }
+
 }
