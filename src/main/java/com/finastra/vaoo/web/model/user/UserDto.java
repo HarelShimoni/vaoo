@@ -30,6 +30,8 @@ public class UserDto {
     @NotNull
     List<AccountDto> accounts;
 
+    private String password;
+
     @NotNull
     private String phone;
     @Email

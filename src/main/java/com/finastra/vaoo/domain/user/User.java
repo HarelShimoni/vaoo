@@ -33,8 +33,11 @@ public class User {
 
     @NotNull
     private String lastName;
+
     @NotNull
     private String phone;
+
+    private String password;
 
     @NotNull
     @Email

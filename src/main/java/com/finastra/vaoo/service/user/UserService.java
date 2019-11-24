@@ -1,5 +1,6 @@
 package com.finastra.vaoo.service.user;
 
+import com.finastra.vaoo.web.model.response.LoginResponse;
 import com.finastra.vaoo.web.model.user.UserDto;
 
 import java.util.List;
@@ -13,7 +14,5 @@ public interface UserService {
     UserDto createUser(UserDto userDto);
     UserDto updateUser(UserDto userDto);
     void deleteUser(UUID userId);
-
-
-
+    LoginResponse login(UUID userId, String password);
 }

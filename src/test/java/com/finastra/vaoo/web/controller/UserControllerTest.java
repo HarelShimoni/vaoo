@@ -1,5 +1,6 @@
 package com.finastra.vaoo.web.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finastra.vaoo.domain.account.Account;
 import com.finastra.vaoo.domain.account.Status;
@@ -20,6 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.hamcrest.core.Is.is;
@@ -126,6 +129,65 @@ class UserControllerTest {
         mockMvc.perform(get(uri)).andExpect(status().isNotFound());
     }
 
+
+
+    @Test
+    @Disabled
+    @DisplayName("login")
+    void loginIsSuccesful () throws Exception {
+        UUID userId = createUserInDb();
+        String uri = "/user/login/";
+
+        Map<String,String> loginDetails = new HashMap<>();
+        loginDetails.put("userId",userId.toString());
+        loginDetails.put("password","mypass");
+
+        mockMvc.perform(post(uri)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(loginDetails)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.authenticated").value("true"));
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("login failed")
+    void loginFailedDueToPasswordMismatch () throws Exception {
+        UUID userId = createUserInDb();
+        String uri = "/user/login/";
+
+        Map<String,String> loginDetails = new HashMap<>();
+        loginDetails.put("userId",userId.toString());
+        loginDetails.put("password","incorrectPass");
+
+        mockMvc.perform(post(uri)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(loginDetails)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.authenticated").value("false"));
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("login failed")
+    void loginFailedDueToNonExistingUser () throws Exception {
+        String uri = "/user/login/";
+
+        Map<String,String> loginDetails = new HashMap<>();
+        loginDetails.put("userId",UUID.randomUUID().toString());
+        loginDetails.put("password","incorrectPass");
+
+        mockMvc.perform(post(uri)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(loginDetails)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.authenticated").value("false"));
+    }
+
+
+
+
+
     private UUID createUserInDb() {
         BankSource hsbc = BankSource.builder()
                 .accountNumber("123")
@@ -135,8 +197,10 @@ class UserControllerTest {
 
         User user = userRepo.save((User.builder()
                 .firstName("tomer")
+                .lastName("ab")
                 .email("tomer@erewrwe.com")
                 .accounts(Arrays.asList(new Account(0, hsbc, Status.NEW)))
+                .password("mypass")
                 .phone("12312312")
                 .city("neta")
                 .country("israel")
@@ -145,6 +209,7 @@ class UserControllerTest {
 
         return user.getId();
     }
+
 
     private User createUserInDbForUpdate() {
         BankSource hsbc = BankSource.builder()
@@ -158,6 +223,7 @@ class UserControllerTest {
                 .lastName("ab")
                 .email("tomer@erewrwe.com")
                 .accounts(Arrays.asList(new Account(0, hsbc, Status.NEW)))
+                .password("mypass")
                 .phone("12312312")
                 .city("neta")
                 .country("israel")
