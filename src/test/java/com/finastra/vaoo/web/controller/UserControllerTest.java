@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finastra.vaoo.domain.account.Account;
 import com.finastra.vaoo.domain.account.Status;
 import com.finastra.vaoo.domain.account.source.BankSource;
+import com.finastra.vaoo.domain.account.source.Source;
 import com.finastra.vaoo.domain.user.User;
 import com.finastra.vaoo.repository.UserRepository;
 import com.finastra.vaoo.web.mappers.user.UserMapper;
@@ -199,7 +200,7 @@ class UserControllerTest {
                 .firstName("tomer")
                 .lastName("ab")
                 .email("tomer@erewrwe.com")
-                .accounts(Arrays.asList(new Account(0, hsbc, Status.NEW)))
+                .accounts(Arrays.asList(new Account(0, Arrays.asList(new Source[]{hsbc}), Status.NEW)))
                 .password("mypass")
                 .phone("12312312")
                 .city("neta")
@@ -222,7 +223,7 @@ class UserControllerTest {
                 .firstName("tomer")
                 .lastName("ab")
                 .email("tomer@erewrwe.com")
-                .accounts(Arrays.asList(new Account(0, hsbc, Status.NEW)))
+                .accounts(Arrays.asList(new Account(0, Arrays.asList(new Source[] {hsbc}), Status.NEW)))
                 .password("mypass")
                 .phone("12312312")
                 .city("neta")
