@@ -89,7 +89,7 @@ class UserControllerTest {
         UserDto userDto = UserDto.builder()
                 .firstName("tomer")
                 .lastName("ab")
-                .accounts(Arrays.asList(accountMapper.toDto(new Account(0, hsbc, Status.NEW))))
+                .accounts(Arrays.asList(accountMapper.toDto(new Account(0, Arrays.asList(hsbc), Status.NEW))))
                 .city("sda")
                 .country("dasds")
                 .email("sadas@dsada.com")
