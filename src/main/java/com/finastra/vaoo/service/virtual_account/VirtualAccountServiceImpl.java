@@ -1,8 +1,9 @@
 package com.finastra.vaoo.service.virtual_account;
 
+import com.finastra.vaoo.domain.virtual_account.VirtualAccount;
 import com.finastra.vaoo.repository.VirtualAccountRepository;
 import com.finastra.vaoo.repository.specification.SearchCriteria;
-import com.finastra.vaoo.repository.specification.VirtualAccountSpecification;
+import com.finastra.vaoo.repository.specification.VirtualDaoSpecification;
 import com.finastra.vaoo.web.mappers.VirtualAccountMapper;
 import com.finastra.vaoo.web.model.virtual_account.VirtualAccountDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,13 +56,11 @@ public class VirtualAccountServiceImpl implements VirtualAccountService {
 
     @Override
     public List<VirtualAccountDto> search(String name, Long id) {
-        return StreamSupport
-                .stream(virtualAccountRepository.findAll(
-                        new VirtualAccountSpecification(new SearchCriteria("name", LIKE, name))
-                        .and(new VirtualAccountSpecification(new SearchCriteria("id", EQUALS, id)))
-                ).spliterator(), true)
-                .map(virtualAccountMapper::toDto)
-                .collect(Collectors.toList());
+        List<VirtualAccount> l =  virtualAccountRepository.findAll(
+                new VirtualDaoSpecification(new SearchCriteria("name", LIKE, name))
+                        .and(new VirtualDaoSpecification(new SearchCriteria("id", EQUALS, id)))
+        );
+        return l.stream().map(virtualAccountMapper::toDto).collect(Collectors.toList());
     }
 
 }

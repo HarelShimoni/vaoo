@@ -48,4 +48,9 @@ public class AccountController {
         return ResponseEntity.status(ACCEPTED).build();
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<AccountDto>> search (@RequestParam(required = false) Long id){
+        return new ResponseEntity(accountService.search(id), OK);
+    }
+
 }

@@ -9,7 +9,7 @@ import javax.persistence.criteria.Root;
 public enum Operation{
     LIKE {
         @Override
-        Predicate execute(Root<VirtualAccount> root, CriteriaBuilder criteriaBuilder, String key, Object value) {
+        <T> Predicate execute(Root<T> root, CriteriaBuilder criteriaBuilder, String key, Object value) {
             try {
                 return criteriaBuilder.like(root.<String>get(key), "%"+value.toString()+"%");
             } catch (NullPointerException e){
@@ -19,7 +19,7 @@ public enum Operation{
     },
     EQUALS {
         @Override
-        Predicate execute(Root<VirtualAccount> root, CriteriaBuilder criteriaBuilder, String key, Object value) {
+        <T> Predicate  execute(Root<T> root, CriteriaBuilder criteriaBuilder, String key, Object value) {
             try {
                 return criteriaBuilder.equal(root.<String>get(key), value.toString());
             } catch (NullPointerException e){
@@ -28,6 +28,6 @@ public enum Operation{
         }
     };
 
-    abstract Predicate execute(Root<VirtualAccount> root, CriteriaBuilder criteriaBuilder, String key, Object value);
+    abstract <T> Predicate execute(Root<T> root, CriteriaBuilder criteriaBuilder, String key, Object value);
 
 }
