@@ -1,5 +1,6 @@
 package com.finastra.vaoo.web.model.user;
 
+import com.finastra.vaoo.web.model.BaseDto;
 import com.finastra.vaoo.web.model.account.AccountDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDto {
+public class UserDto extends BaseDto {
 
     @NotNull
     private UUID id;
@@ -40,5 +41,4 @@ public class UserDto {
     private String city;
     @NotNull
     private String country;
-
 }
