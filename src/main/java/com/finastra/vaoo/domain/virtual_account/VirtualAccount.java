@@ -1,5 +1,6 @@
 package com.finastra.vaoo.domain.virtual_account;
 
+import com.finastra.vaoo.util.DateUtil;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,8 +9,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.Date;
-
-import static com.finastra.vaoo.util.DateUtil.initExpirationDate;
 
 @Entity
 @Builder
@@ -38,7 +37,7 @@ public class VirtualAccount {
     Date expirationDate;
 
     public void setExpirationDate(Date expirationDate) {
-        this.expirationDate = initExpirationDate(expirationDate);
+        this.expirationDate = new DateUtil().initExpirationDate(expirationDate);
     }
 
     public VirtualAccount(long id, String name, Context context, double vlimit, double balance, boolean autotop, Date expirationDate) {

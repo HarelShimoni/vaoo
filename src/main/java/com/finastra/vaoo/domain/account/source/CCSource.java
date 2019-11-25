@@ -1,5 +1,6 @@
 package com.finastra.vaoo.domain.account.source;
 
+import com.finastra.vaoo.util.DateUtil;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,10 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.Calendar;
 import java.util.Date;
-
-import static com.finastra.vaoo.util.DateUtil.initExpirationDate;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -38,6 +36,6 @@ public class CCSource extends Source {
     public CCSource(long id, String ccNumber, CCProvider provider, Date expirationDate) {
         this.ccNumber = ccNumber.replaceAll("\\s+", "");
         this.provider = provider;
-        this.expirationDate = initExpirationDate(expirationDate);
+        this.expirationDate = new DateUtil().initExpirationDate(expirationDate);
     }
 }
