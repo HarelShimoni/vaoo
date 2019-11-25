@@ -11,6 +11,8 @@ import javax.validation.constraints.Pattern;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.finastra.vaoo.util.DateUtil.initExpirationDate;
+
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NoArgsConstructor
@@ -33,19 +35,9 @@ public class CCSource extends Source {
     @Future
     Date expirationDate;
 
-    public void setExpirationDate(Date expirationDate){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(expirationDate);
-        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-        cal.set(Calendar.HOUR, 23);
-        cal.set(Calendar.MINUTE, 59);
-        cal.set(Calendar.SECOND, 59);
-        this.expirationDate = cal.getTime();
-    }
-
     public CCSource(long id, String ccNumber, CCProvider provider, Date expirationDate) {
         this.ccNumber = ccNumber.replaceAll("\\s+", "");
         this.provider = provider;
-        setExpirationDate(expirationDate);
+        this.expirationDate = initExpirationDate(expirationDate);
     }
 }

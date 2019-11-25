@@ -1,6 +1,5 @@
 package com.finastra.vaoo.service.account;
 
-import com.finastra.vaoo.domain.account.Account;
 import com.finastra.vaoo.web.model.account.AccountDto;
 
 import java.util.List;
