@@ -1,22 +1,20 @@
 package com.finastra.vaoo.web.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finastra.vaoo.domain.account.Account;
 import com.finastra.vaoo.domain.account.Status;
 import com.finastra.vaoo.domain.account.source.BankSource;
 import com.finastra.vaoo.domain.user.User;
 import com.finastra.vaoo.repository.UserRepository;
+import com.finastra.vaoo.web.mappers.account.AccountMapper;
 import com.finastra.vaoo.web.mappers.user.UserMapper;
 import com.finastra.vaoo.web.model.user.UserDto;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -33,9 +31,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 
 class UserControllerTest {
+
+    private String VALID_TOKEN = "AD8F276E479AE52E7BF5DF8C22363";
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,6 +45,11 @@ class UserControllerTest {
     @Autowired
     private UserMapper userMapper;
 
+
+    @Autowired
+    private AccountMapper accountMapper;
+
+
     @Autowired
     UserRepository userRepo;
 
@@ -54,17 +58,16 @@ class UserControllerTest {
     void testUserExists() throws Exception {
         UUID generatedId = createUserInDb();
 
-        mockMvc.perform(get("/user/" + generatedId))
+        mockMvc.perform(get("/user/" + generatedId).header("token",VALID_TOKEN))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName",is("tomer")));
     }
 
     @Test
-    @Disabled
     @DisplayName("Return not found response (400) in case user was not found in repository")
     void testUserIsMissing() throws Exception {
         UUID uuid = UUID.randomUUID();
-        mockMvc.perform(get("/user/" + uuid))
+        mockMvc.perform(get("/user/" + uuid).header("token",VALID_TOKEN))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -73,13 +76,19 @@ class UserControllerTest {
     }
 
     @Test
-    @Disabled
     @DisplayName("test create user")
     void createUser() throws Exception {
         //arrange
+        BankSource hsbc = BankSource.builder()
+                .accountNumber("123")
+                .bank("hsbc")
+                .branch("1232")
+                .build();
+
         UserDto userDto = UserDto.builder()
                 .firstName("tomer")
                 .lastName("ab")
+                .accounts(Arrays.asList(accountMapper.toDto(new Account(0, hsbc, Status.NEW))))
                 .city("sda")
                 .country("dasds")
                 .email("sadas@dsada.com")
@@ -88,13 +97,13 @@ class UserControllerTest {
 
         //act and assert
         mockMvc.perform(post("/user")
+                .header("token",VALID_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isCreated());
     }
 
     @Test
-    @Disabled
     @DisplayName("test update user")
     void updateUser() throws Exception {
         //arrange
@@ -106,6 +115,7 @@ class UserControllerTest {
 
         //act and assert
         mockMvc.perform(put("/user")
+                .header("token",VALID_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk())
@@ -114,7 +124,6 @@ class UserControllerTest {
     }
 
     @Test
-    @Disabled
     @DisplayName("delete user")
     void deleteUser() throws Exception {
         //arrange
@@ -122,17 +131,16 @@ class UserControllerTest {
         String uri = "/user/" + userId;
 
         //act
-        mockMvc.perform(get(uri)).andExpect(status().isOk()); //check user was created
-        mockMvc.perform(delete(uri)).andExpect(status().isOk()); //delete the user
+        mockMvc.perform(get(uri).header("token",VALID_TOKEN)).andExpect(status().isOk()); //check user was created
+        mockMvc.perform(delete(uri).header("token",VALID_TOKEN)).andExpect(status().isOk()); //delete the user
 
         //assert
-        mockMvc.perform(get(uri)).andExpect(status().isNotFound());
+        mockMvc.perform(get(uri).header("token",VALID_TOKEN)).andExpect(status().isNotFound());
     }
 
 
 
     @Test
-    @Disabled
     @DisplayName("login")
     void loginIsSuccesful () throws Exception {
         UUID userId = createUserInDb();
@@ -143,6 +151,7 @@ class UserControllerTest {
         loginDetails.put("password","mypass");
 
         mockMvc.perform(post(uri)
+                .header("token",VALID_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(loginDetails)))
                 .andExpect(status().isOk())
@@ -150,7 +159,6 @@ class UserControllerTest {
     }
 
     @Test
-    @Disabled
     @DisplayName("login failed")
     void loginFailedDueToPasswordMismatch () throws Exception {
         UUID userId = createUserInDb();
@@ -161,6 +169,7 @@ class UserControllerTest {
         loginDetails.put("password","incorrectPass");
 
         mockMvc.perform(post(uri)
+                .header("token",VALID_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(loginDetails)))
                 .andExpect(status().isOk())
@@ -168,7 +177,6 @@ class UserControllerTest {
     }
 
     @Test
-    @Disabled
     @DisplayName("login failed")
     void loginFailedDueToNonExistingUser () throws Exception {
         String uri = "/user/login/";
@@ -178,6 +186,7 @@ class UserControllerTest {
         loginDetails.put("password","incorrectPass");
 
         mockMvc.perform(post(uri)
+                .header("token",VALID_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(loginDetails)))
                 .andExpect(status().isOk())

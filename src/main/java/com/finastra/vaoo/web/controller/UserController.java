@@ -34,8 +34,7 @@ public class UserController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
-        String token = userDto.getToken();
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto,@RequestHeader String token) {
 
         if (SecurityService.validate(token)) {
             return new ResponseEntity<>(userService.createUser(userDto), HttpStatus.CREATED);
@@ -51,9 +50,7 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
-        String token = userDto.getToken();
-
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @RequestHeader String token) {
         if (SecurityService.validate(token)) {
             UserDto updatedUser = userService.updateUser(userDto);
             return new ResponseEntity<>(updatedUser, HttpStatus.OK);
@@ -61,7 +58,7 @@ public class UserController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody Map<String, String> loginDetails) {
+    public ResponseEntity<LoginResponse> login(@RequestBody Map<String, String> loginDetails,@RequestHeader String token) {
         String userId = loginDetails.get("userId");
         String password = loginDetails.get("password");
 
