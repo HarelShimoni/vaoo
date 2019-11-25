@@ -1,17 +1,18 @@
 package com.finastra.vaoo.service.account;
 
-import com.finastra.vaoo.domain.account.Account;
 import com.finastra.vaoo.repository.AccountRepository;
 import com.finastra.vaoo.web.mappers.account.AccountMapper;
 import com.finastra.vaoo.web.model.account.AccountDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class AccountServiceImpl implements AccountService {
 
     @Autowired

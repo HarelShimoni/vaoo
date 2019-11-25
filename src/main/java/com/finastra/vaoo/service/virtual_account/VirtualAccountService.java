@@ -12,5 +12,7 @@ public interface VirtualAccountService {
 
     List<VirtualAccountDto> getVirtualAccounts();
 
-    VirtualAccountDto deleteVirtualAccount(long id);
+    void deleteVirtualAccount(long id);
+
+    List<VirtualAccountDto> search(String name, Long id);
 }

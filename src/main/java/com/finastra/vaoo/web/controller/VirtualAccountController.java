@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -37,7 +38,13 @@ public class VirtualAccountController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<VirtualAccountDto> deleteVirtualAccount(@PathVariable long id) {
-        return new ResponseEntity<>(virtualAccountService.deleteVirtualAccount(id), OK);
+    ResponseEntity deleteVirtualAccount(@PathVariable long id) {
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/search")
+    ResponseEntity<List<VirtualAccountDto>> search(@RequestParam(required = false) String name,
+                                                   @RequestParam(required = false) Long id){
+        return new ResponseEntity<>(virtualAccountService.search(name, id),OK);
     }
 }

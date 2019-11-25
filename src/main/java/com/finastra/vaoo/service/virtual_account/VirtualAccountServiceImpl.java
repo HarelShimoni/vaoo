@@ -1,19 +1,25 @@
 package com.finastra.vaoo.service.virtual_account;
 
 import com.finastra.vaoo.repository.VirtualAccountRepository;
+import com.finastra.vaoo.repository.specification.SearchCriteria;
+import com.finastra.vaoo.repository.specification.VirtualAccountSpecification;
 import com.finastra.vaoo.web.mappers.VirtualAccountMapper;
 import com.finastra.vaoo.web.model.virtual_account.VirtualAccountDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static com.finastra.vaoo.repository.specification.Operation.EQUALS;
+import static com.finastra.vaoo.repository.specification.Operation.LIKE;
+
 @Service
-public class VirtualAccountServiceImpl implements VirtualAccountService{
+@Transactional
+public class VirtualAccountServiceImpl implements VirtualAccountService {
     @Autowired
     VirtualAccountRepository virtualAccountRepository;
 
@@ -21,10 +27,12 @@ public class VirtualAccountServiceImpl implements VirtualAccountService{
     VirtualAccountMapper virtualAccountMapper;
 
     @Override
-    public Optional<VirtualAccountDto> getVirtualAccountById(long id){return Optional.of(new VirtualAccountDto(1l, "acc1", "alcohol", 0.0, 0.0, true, new Date()));}
+    public Optional<VirtualAccountDto> getVirtualAccountById(long id) {
+        return virtualAccountRepository.findById(id).map(virtualAccountMapper::toDto);
+    }
 
     @Override
-    public VirtualAccountDto createVirtualAccount(VirtualAccountDto virtualAccountDto){
+    public VirtualAccountDto createVirtualAccount(VirtualAccountDto virtualAccountDto) {
         return virtualAccountMapper.toDto(
                 virtualAccountRepository.save(
                         virtualAccountMapper.toEntity(virtualAccountDto)
@@ -33,13 +41,27 @@ public class VirtualAccountServiceImpl implements VirtualAccountService{
     }
 
     @Override
-    public List<VirtualAccountDto> getVirtualAccounts(){
+    public List<VirtualAccountDto> getVirtualAccounts() {
         return StreamSupport
-                .stream(virtualAccountRepository.findAll().spliterator(),true)
+                .stream(virtualAccountRepository.findAll().spliterator(), true)
                 .map(virtualAccountMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public VirtualAccountDto deleteVirtualAccount(long id){return new VirtualAccountDto(id, "acc1", "alcohol", 0.0, 0.0, true, new Date());}
+    public void deleteVirtualAccount(long id) {
+        virtualAccountRepository.deleteById(id);
+    }
+
+    @Override
+    public List<VirtualAccountDto> search(String name, Long id) {
+        return StreamSupport
+                .stream(virtualAccountRepository.findAll(
+                        new VirtualAccountSpecification(new SearchCriteria("name", LIKE, name))
+                        .and(new VirtualAccountSpecification(new SearchCriteria("id", EQUALS, id)))
+                ).spliterator(), true)
+                .map(virtualAccountMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
 }
