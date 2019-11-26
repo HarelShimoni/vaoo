@@ -1,6 +1,8 @@
 package com.finastra.vaoo.service.virtual_account;
 
+import com.finastra.vaoo.domain.account.Account;
 import com.finastra.vaoo.domain.virtual_account.VirtualAccount;
+import com.finastra.vaoo.repository.AccountRepository;
 import com.finastra.vaoo.repository.VirtualAccountRepository;
 import com.finastra.vaoo.repository.specification.SearchCriteria;
 import com.finastra.vaoo.repository.specification.VirtualDaoSpecification;
@@ -9,6 +11,7 @@ import com.finastra.vaoo.web.model.virtual_account.VirtualAccountDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +28,9 @@ public class VirtualAccountServiceImpl implements VirtualAccountService {
     VirtualAccountRepository virtualAccountRepository;
 
     @Autowired
+    AccountRepository accountRepository;
+
+    @Autowired
     VirtualAccountMapper virtualAccountMapper;
 
     @Override
@@ -33,12 +39,11 @@ public class VirtualAccountServiceImpl implements VirtualAccountService {
     }
 
     @Override
-    public VirtualAccountDto createVirtualAccount(VirtualAccountDto virtualAccountDto) {
-        return virtualAccountMapper.toDto(
-                virtualAccountRepository.save(
-                        virtualAccountMapper.toEntity(virtualAccountDto)
-                )
-        );
+    public VirtualAccountDto createVirtualAccount(VirtualAccountDto virtualAccountDto, long account) {
+        VirtualAccount vacc = virtualAccountMapper.toEntity(virtualAccountDto);
+        Account acc = accountRepository.findById(account).orElseThrow(() -> new EntityNotFoundException("Master account not found"));
+        acc.getVirtualAccounts().add(virtualAccountMapper.toEntity(virtualAccountDto));
+        return virtualAccountMapper.toDto(vacc);
     }
 
     @Override
@@ -56,7 +61,7 @@ public class VirtualAccountServiceImpl implements VirtualAccountService {
 
     @Override
     public List<VirtualAccountDto> search(String name, Long id) {
-        List<VirtualAccount> l =  virtualAccountRepository.findAll(
+        List<VirtualAccount> l = virtualAccountRepository.findAll(
                 new VirtualDaoSpecification(new SearchCriteria("name", LIKE, name))
                         .and(new VirtualDaoSpecification(new SearchCriteria("id", EQUALS, id)))
         );

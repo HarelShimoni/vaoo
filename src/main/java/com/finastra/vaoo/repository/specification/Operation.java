@@ -1,7 +1,5 @@
 package com.finastra.vaoo.repository.specification;
 
-import com.finastra.vaoo.domain.virtual_account.VirtualAccount;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;

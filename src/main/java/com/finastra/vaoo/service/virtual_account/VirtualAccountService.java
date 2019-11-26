@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface VirtualAccountService {
     Optional<VirtualAccountDto> getVirtualAccountById(long id);
 
-    VirtualAccountDto createVirtualAccount(VirtualAccountDto accountDto);
+    VirtualAccountDto createVirtualAccount(VirtualAccountDto accountDto, long account);
 
     List<VirtualAccountDto> getVirtualAccounts();
 

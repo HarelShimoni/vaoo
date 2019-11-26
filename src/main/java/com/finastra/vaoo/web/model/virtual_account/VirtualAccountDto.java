@@ -39,5 +39,8 @@ public class VirtualAccountDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/yy")
     Date expirationDate;
 
+    @JsonProperty
+    AccountDto account;
+
 
 }

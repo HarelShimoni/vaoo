@@ -33,8 +33,8 @@ public class VirtualAccountController {
     }
 
     @PostMapping({"/", ""})
-    ResponseEntity<VirtualAccountDto> createVirtualAccount(@RequestBody VirtualAccountDto account) {
-        return new ResponseEntity<>(virtualAccountService.createVirtualAccount(account), OK);
+    ResponseEntity<VirtualAccountDto> createVirtualAccount(@RequestBody VirtualAccountDto virtualAccountDto, @RequestParam long account) {
+        return new ResponseEntity<>(virtualAccountService.createVirtualAccount(virtualAccountDto, account), OK);
     }
 
     @DeleteMapping("/{id}")

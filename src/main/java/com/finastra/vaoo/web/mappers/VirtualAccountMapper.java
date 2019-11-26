@@ -2,11 +2,12 @@ package com.finastra.vaoo.web.mappers;
 
 import com.finastra.vaoo.domain.virtual_account.Context;
 import com.finastra.vaoo.domain.virtual_account.VirtualAccount;
+import com.finastra.vaoo.web.mappers.account.AccountMapper;
 import com.finastra.vaoo.web.model.virtual_account.VirtualAccountDto;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = AccountMapper.class)
 @Component
 public interface VirtualAccountMapper {
     VirtualAccount toEntity(VirtualAccountDto virtualAccountDto);

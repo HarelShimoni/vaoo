@@ -1,5 +1,6 @@
 package com.finastra.vaoo.domain.virtual_account;
 
+import com.finastra.vaoo.domain.account.Account;
 import com.finastra.vaoo.util.DateUtil;
 import lombok.Builder;
 import lombok.Data;
@@ -40,13 +41,17 @@ public class VirtualAccount {
         this.expirationDate = new DateUtil().initExpirationDate(expirationDate);
     }
 
-    public VirtualAccount(long id, String name, Context context, double vlimit, double balance, boolean autotop, Date expirationDate) {
-        this.id = id;
+    @ManyToOne
+    Account account;
+
+    public VirtualAccount(long id, String name, Context context, double vlimit, double balance, boolean autotop, Date expirationDate, Account account) {
         this.name = name;
         this.context = context;
         this.vlimit = vlimit;
         this.balance = balance;
         this.autotop = autotop;
         setExpirationDate(expirationDate);
+        this.account = account;
     }
+
 }
