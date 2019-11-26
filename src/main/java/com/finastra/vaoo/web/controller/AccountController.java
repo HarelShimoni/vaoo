@@ -37,7 +37,7 @@ public class AccountController {
     }
 
     @PostMapping({"/", ""})
-    public ResponseEntity<AccountDto> createUser(@RequestBody AccountDto accountDto) {
+    public ResponseEntity<AccountDto> createAccount(@RequestBody AccountDto accountDto) {
         return new ResponseEntity<>(
                 accountService.createAccount(accountDto), CREATED);
     }
