@@ -17,7 +17,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    private String INVALID_TOKEN = "token is invalid: %s";
     private UserService userService;
 
     public UserController(UserService userService) {
@@ -26,35 +25,25 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable UUID id, @RequestHeader String token) {
-        if (SecurityService.validate(token)) {
         return new ResponseEntity<>(userService.getUser(id)
                 .orElseThrow(() -> new EntityNotFoundException(id.toString())), HttpStatus.OK);
-        } else throw new SecurityException(String.format(INVALID_TOKEN, token));
-
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto,@RequestHeader String token) {
-
-        if (SecurityService.validate(token)) {
-            return new ResponseEntity<>(userService.createUser(userDto), HttpStatus.CREATED);
-        } else throw new SecurityException(String.format(INVALID_TOKEN, token));
+         return new ResponseEntity<>(userService.createUser(userDto), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUser(@PathVariable UUID id, @RequestHeader String token) {
-        if (SecurityService.validate(token)) {
             userService.deleteUser(id);
             return new ResponseEntity(HttpStatus.OK);
-        } else throw new SecurityException(String.format(INVALID_TOKEN, token));
     }
 
     @PutMapping
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @RequestHeader String token) {
-        if (SecurityService.validate(token)) {
             UserDto updatedUser = userService.updateUser(userDto);
             return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-        } else throw new SecurityException(String.format(INVALID_TOKEN, token));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/login")
