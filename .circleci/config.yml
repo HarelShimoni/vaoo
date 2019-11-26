@@ -3,6 +3,12 @@
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
 version: 2
+orbs:
+  heroku: circleci/heroku@1.0.0
+  workflows:
+    heroku_deploy:
+      jobs:
+        - heroku/deploy-via-git
 jobs:
   build:
     docker:
@@ -49,3 +55,10 @@ jobs:
                 docker build -t minimingus/fusion-pay:latest .
                 echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
                 docker push minimingus/fusion-pay:latest
+      - deploy:
+         executor: heroku/default
+         steps:
+           - checkout
+           - heroku/install
+           - heroku/deploy-via-git:
+               only-branch: master
