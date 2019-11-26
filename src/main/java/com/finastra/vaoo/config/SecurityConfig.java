@@ -9,9 +9,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 @Configuration
 public class SecurityConfig implements WebMvcConfigurer {
+    private String INVALID_TOKEN = "token is invalid: %s";
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new HandlerInterceptor() {
@@ -19,7 +22,7 @@ public class SecurityConfig implements WebMvcConfigurer {
             public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
                 boolean isValid = SecurityService.validate(request.getHeader("token"));
                 if (!isValid) {
-                    response.sendError(401, "Authentification failed");
+                    throw new SecurityException(String.format(INVALID_TOKEN, Optional.ofNullable(request.getHeader("token")).orElse("\"\"")));
                 }
                 return isValid;
             }
