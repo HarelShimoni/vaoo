@@ -10,6 +10,8 @@ public interface VirtualAccountService {
 
     VirtualAccountDto createVirtualAccount(VirtualAccountDto accountDto, long account);
 
+    VirtualAccountDto updateVirtualAccount(VirtualAccountDto virtualAccountDto);
+
     List<VirtualAccountDto> getVirtualAccounts();
 
     void deleteVirtualAccount(long id);

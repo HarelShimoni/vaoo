@@ -3,12 +3,12 @@ package com.finastra.vaoo.web.controller;
 import com.finastra.vaoo.service.account.AccountService;
 import com.finastra.vaoo.web.model.account.AccountDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -40,6 +40,12 @@ public class AccountController {
     public ResponseEntity<AccountDto> createAccount(@RequestBody AccountDto accountDto) {
         return new ResponseEntity<>(
                 accountService.createAccount(accountDto), CREATED);
+    }
+
+    @PutMapping({"/", ""})
+    public ResponseEntity<AccountDto> updateAccount(@RequestBody AccountDto accountDto) {
+        return new ResponseEntity<>(
+                accountService.createAccount(accountDto), OK);
     }
 
     @DeleteMapping("/{id}")
