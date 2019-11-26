@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -21,17 +22,17 @@ public class AccountController {
     public ResponseEntity<AccountDto> getAccountById(@PathVariable("id") long id) {
         return new ResponseEntity<>(
                 accountService.getAccountById(id)
-                        .orElseThrow(NoSuchElementException::new
-                        ), FOUND);
+                        .orElseThrow(() -> new EntityNotFoundException(String.valueOf(id))
+                        ), OK);
     }
 
     @GetMapping({"/", ""})
-    public ResponseEntity<List<AccountDto>> getAccountById() {
+    public ResponseEntity<List<AccountDto>> getAccounts() {
         List<AccountDto> accounts = accountService.getAccounts();
-        if (!accounts.isEmpty()){
+        if (!accounts.isEmpty()) {
             return new ResponseEntity<>(accounts, OK);
         } else {
-            throw new NoSuchElementException("There're no accounts in db");
+            throw new EntityNotFoundException("There're no accounts in db");
         }
     }
 
@@ -41,10 +42,15 @@ public class AccountController {
                 accountService.createAccount(accountDto), CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity deleteAccount(@PathVariable long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteAccount(@PathVariable long id) {
         accountService.deleteAccount(id);
         return ResponseEntity.status(ACCEPTED).build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<AccountDto>> search (@RequestParam(required = false) Long id){
+        return new ResponseEntity(accountService.search(id), OK);
     }
 
 }

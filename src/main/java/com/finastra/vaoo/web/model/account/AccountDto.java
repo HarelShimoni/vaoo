@@ -2,6 +2,7 @@ package com.finastra.vaoo.web.model.account;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.finastra.vaoo.web.model.account.source.SourceDto;
+import com.finastra.vaoo.web.model.virtual_account.VirtualAccountDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,6 +26,9 @@ public class AccountDto {
 
     @JsonProperty(defaultValue = "NEW")
     String status;
+
+    @JsonProperty
+    List<VirtualAccountDto> virtualAccounts;
 
     public AccountDto(List<SourceDto> sources, String status) {
         this.sources = sources;

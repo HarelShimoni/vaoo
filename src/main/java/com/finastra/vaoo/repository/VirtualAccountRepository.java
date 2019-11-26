@@ -1,10 +1,10 @@
 package com.finastra.vaoo.repository;
 
-import com.finastra.vaoo.domain.account.Account;
+import com.finastra.vaoo.domain.virtual_account.VirtualAccount;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AccountRepository extends CrudRepository<Account, Long>, JpaSpecificationExecutor<Account> {
+public interface VirtualAccountRepository extends CrudRepository<VirtualAccount, Long>, JpaSpecificationExecutor<VirtualAccount> {
 }
