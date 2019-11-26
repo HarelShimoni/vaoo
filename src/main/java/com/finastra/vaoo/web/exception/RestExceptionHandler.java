@@ -35,7 +35,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return handleExceptionInternal(ex, bodyOfResponse,
-                headers, HttpStatus.BAD_REQUEST, request);
+                headers, HttpStatus.UNAUTHORIZED, request);
     }
 
     @ExceptionHandler (value = {MissingRequestHeaderException.class})
