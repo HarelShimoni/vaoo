@@ -29,7 +29,6 @@ public class UserDto {
 
     @NotNull
     List<AccountDto> accounts;
-
     private String password;
 
     @NotNull
@@ -40,5 +39,4 @@ public class UserDto {
     private String city;
     @NotNull
     private String country;
-
 }

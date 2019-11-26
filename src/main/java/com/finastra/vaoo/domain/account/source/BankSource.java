@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -20,9 +21,11 @@ public class BankSource extends Source {
     long id;
 
     @NotNull
+    @Pattern(regexp = "^\\d+$")
     String accountNumber;
 
     @NotNull
+    @Pattern(regexp = "^[A-Za-z -].*$")
     String bank;
 
     @NotNull
