@@ -40,10 +40,16 @@ public class VirtualAccountServiceImpl implements VirtualAccountService {
 
     @Override
     public VirtualAccountDto createVirtualAccount(VirtualAccountDto virtualAccountDto, long account) {
-        VirtualAccount vacc = virtualAccountMapper.toEntity(virtualAccountDto);
+        VirtualAccount vacc = virtualAccountRepository.save(virtualAccountMapper.toEntity(virtualAccountDto));
         Account acc = accountRepository.findById(account).orElseThrow(() -> new EntityNotFoundException("Master account not found"));
-        acc.getVirtualAccounts().add(virtualAccountMapper.toEntity(virtualAccountDto));
+        acc.getVirtualAccounts().add(vacc);
         return virtualAccountMapper.toDto(vacc);
+    }
+
+    @Override
+    public VirtualAccountDto updateVirtualAccount(VirtualAccountDto virtualAccountDto){
+        virtualAccountMapper.toEntity(virtualAccountDto).equals(virtualAccountRepository.findById(virtualAccountDto.getId()));
+        return virtualAccountMapper.toDto(virtualAccountRepository.save(virtualAccountMapper.toEntity(virtualAccountDto)));
     }
 
     @Override

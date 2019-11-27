@@ -7,10 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
-import javax.websocket.server.PathParam;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/vaccount")
@@ -34,7 +33,7 @@ public class VirtualAccountController {
 
     @PostMapping({"/", ""})
     ResponseEntity<VirtualAccountDto> createVirtualAccount(@RequestBody VirtualAccountDto virtualAccountDto, @RequestParam long account) {
-        return new ResponseEntity<>(virtualAccountService.createVirtualAccount(virtualAccountDto, account), OK);
+        return new ResponseEntity<>(virtualAccountService.createVirtualAccount(virtualAccountDto, account), CREATED);
     }
 
     @DeleteMapping("/{id}")
@@ -44,7 +43,12 @@ public class VirtualAccountController {
 
     @GetMapping("/search")
     ResponseEntity<List<VirtualAccountDto>> search(@RequestParam(required = false) String name,
-                                                   @RequestParam(required = false) Long id){
-        return new ResponseEntity<>(virtualAccountService.search(name, id),OK);
+                                                   @RequestParam(required = false) Long id) {
+        return new ResponseEntity<>(virtualAccountService.search(name, id), ACCEPTED);
+    }
+
+    @PutMapping({"", "/"})
+    ResponseEntity<VirtualAccountDto> updateAccount(@RequestBody VirtualAccountDto virtualAccountDto) {
+        return new ResponseEntity<>(virtualAccountService.updateVirtualAccount(virtualAccountDto), OK);
     }
 }
