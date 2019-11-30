@@ -14,7 +14,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 import java.io.IOException;
 
 public class AuthService {
-    Interceptor interceptor = chain -> {
+    private Interceptor interceptor = chain -> {
         Request original = chain.request();
         Request request = original.newBuilder()
                 .header("Authorization", Credentials.basic("8ff77956-6469-49b5-a7fa-79624fe8bef4", "ac157903-c0a3-4527-a18a-828c63eb58b0"))
@@ -23,11 +23,11 @@ public class AuthService {
         return chain.proceed(request);
     };
 
-    OkHttpClient client = new OkHttpClient.Builder()
+    private OkHttpClient client = new OkHttpClient.Builder()
             .addInterceptor(interceptor)
             .build();
 
-    FFDCOauth oauth = new Retrofit.Builder()
+    private FFDCOauth oauth = new Retrofit.Builder()
             .baseUrl("https://api.lobdev.fusionfabric.cloud/")
             .client(client)
             .addConverterFactory(JacksonConverterFactory.create())
