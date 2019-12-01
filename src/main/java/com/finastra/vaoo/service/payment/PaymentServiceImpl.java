@@ -7,9 +7,10 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class PaymentServiceImpl implements PaymentService{
+public class PaymentServiceImpl implements PaymentService {
 
     private PaymentRepository paymentRepository;
     private PaymentMapper paymentMapper;
@@ -26,16 +27,18 @@ public class PaymentServiceImpl implements PaymentService{
 
     @Override
     public PaymentDto getPayment(long id) {
-        return paymentMapper.toDto(paymentRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Payment could not be found")));
+        return paymentMapper.toDto(paymentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Payment could not be found")));
     }
 
     @Override
     public List<PaymentDto> getPayments() {
-        return paymentMapper.toDtos(paymentRepository.findAll());
+        return Optional.of(paymentMapper.toDtos(paymentRepository.findAll())).orElseThrow(() -> new EntityNotFoundException("Payments could not be found"));
     }
 
     @Override
     public List<PaymentDto> getPaymentsByReference(String ref) {
-        return paymentMapper.toDtos(paymentRepository.findByReference(ref));
+        return Optional.of(
+                paymentMapper.toDtos(paymentRepository.findByReference(ref)))
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Payment with reference %s could not be found", ref)));
     }
 }
