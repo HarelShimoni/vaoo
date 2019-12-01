@@ -4,4 +4,5 @@ public class FFDCAuthentificationException extends RuntimeException {
     public FFDCAuthentificationException(String message) {
         super(message);
     }
+
 }

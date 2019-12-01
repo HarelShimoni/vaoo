@@ -3,7 +3,6 @@ package com.finastra.vaoo.client.ffdc.auth.client;
 import com.finastra.vaoo.client.ffdc.auth.exceptions.FFDCAuthentificationException;
 import com.finastra.vaoo.client.ffdc.auth.model.SecretStorage;
 import com.finastra.vaoo.client.ffdc.auth.model.Session;
-import okhttp3.Credentials;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -13,16 +12,14 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import java.io.IOException;
 
-import static com.finastra.vaoo.client.ffdc.config.FFDCConstants.AUTH_HEADER;
-import static com.finastra.vaoo.client.ffdc.config.FFDCConstants.FFDC_BASE_URL;
+import static com.finastra.vaoo.client.ffdc.config.FFDCConstants.*;
 
 class AuthService {
     private static final String GRANT_TYPE = "client_credentials";
     private Interceptor interceptor = chain -> {
         Request original = chain.request();
-//TODO - extract credentials
         Request request = original.newBuilder()
-                .header(AUTH_HEADER, Credentials.basic("8ff77956-6469-49b5-a7fa-79624fe8bef4", "ac157903-c0a3-4527-a18a-828c63eb58b0"))
+                .header(AUTH_HEADER, CREDENTIALS)
                 .method(original.method(), original.body())
                 .build();
         return chain.proceed(request);

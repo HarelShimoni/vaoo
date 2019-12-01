@@ -3,12 +3,11 @@ package com.finastra.vaoo.client.ffdc.auth.model;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SecretStorage {
     private Session session;
-    private static volatile SecretStorage instance;
+    private static SecretStorage instance;
 
     public static SecretStorage getInstance() {
         SecretStorage localInstance = instance;

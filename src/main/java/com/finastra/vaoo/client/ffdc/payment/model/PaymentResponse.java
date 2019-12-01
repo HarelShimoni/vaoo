@@ -18,5 +18,13 @@ public class PaymentResponse {
     @JsonProperty
     String statusReasonAdditionalInformation;
 
-    String Id;
+    String id;
+
+    public void setStatusReasonCode(String statusReasonCode) {
+        this.statusReasonCode = statusReasonCode;
+    }
+
+    public void setStatusReasonAdditionalInformation(String statusReasonAdditionalInformation) {
+        this.statusReasonAdditionalInformation = statusReasonAdditionalInformation;
+    }
 }

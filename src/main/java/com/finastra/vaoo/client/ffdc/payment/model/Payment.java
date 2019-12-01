@@ -1,11 +1,14 @@
 
 package com.finastra.vaoo.client.ffdc.payment.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +21,8 @@ public class Payment {
     @JsonProperty("paymentInformationId")
     public String paymentInformationId;
     @JsonProperty("requestedExecutionDate")
-    public String requestedExecutionDate;
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT, pattern = "yyyy-MM-dd")
+    public Date requestedExecutionDate;
     @JsonProperty("instructedAmount")
     public InstructedAmount instructedAmount;
     @JsonProperty("paymentIdentification")
@@ -38,10 +42,14 @@ public class Payment {
     @JsonProperty("remittanceInformationUnstructured")
     public String remittanceInformationUnstructured;
 
+    public static Payment.Builder builder() {
+        return new Payment.Builder();
+    }
+
     public static class Builder {
         private String initiatingParty;
         private String paymentInformationId;
-        private String requestedExecutionDate;
+        private Date requestedExecutionDate;
         private InstructedAmount instructedAmount;
         private PaymentIdentification paymentIdentification;
         private Debtor debtor;
@@ -65,7 +73,7 @@ public class Payment {
             return this;
         }
 
-        public Builder requestedExecutionDate(final String requestedExecutionDate) {
+        public Builder requestedExecutionDate(final Date requestedExecutionDate) {
             this.requestedExecutionDate = requestedExecutionDate;
             return this;
         }
@@ -75,8 +83,18 @@ public class Payment {
             return this;
         }
 
+        public Builder instructedAmount(final int ammount, final String currency) {
+            this.instructedAmount = new InstructedAmount(ammount, currency);
+            return this;
+        }
+
         public Builder paymentIdentification(final PaymentIdentification paymentIdentification) {
             this.paymentIdentification = paymentIdentification;
+            return this;
+        }
+
+        public Builder paymentIdentification(final String paymentIdentification) {
+            this.paymentIdentification = new PaymentIdentification(paymentIdentification);
             return this;
         }
 
@@ -91,6 +109,20 @@ public class Payment {
             this.creditor = creditor;
             this.creditorAgent = creditorAgent;
             this.creditorAccountId = creditorAccountId;
+            return this;
+        }
+
+        public Builder debtor(final String debtor, final String debtorAgent, final String debtorAccountId) {
+            this.debtor = new Debtor(debtor);
+            this.debtorAgent = new DebtorAgent(debtorAgent);
+            this.debtorAccountId = new DebtorAccountId(debtorAccountId);
+            return this;
+        }
+
+        public Builder creditor(final String creditor, final String creditorAgent, final String creditorAccountId) {
+            this.creditor = new Creditor(creditor);
+            this.creditorAgent = new CreditorAgent(creditorAgent);
+            this.creditorAccountId = new CreditorAccountId(creditorAccountId);
             return this;
         }
 
