@@ -24,24 +24,24 @@ public class Payment {
     @GeneratedValue
     private long id;
 
-   // @NotNull
+    @NotNull
     @Enumerated(EnumType.ORDINAL)
     private Status status;
 
-   // @NotBlank
+    @NotBlank
     private String reference;
 
     @PositiveOrZero
     private BigDecimal amount;
 
-    //@NotBlank
-    //@Pattern(regexp = "[A-Z]{3}")
+    @NotBlank
+    @Pattern(regexp = "[A-Z]{3}")
     private String currency;
 
-    //@NotNull
+    @NotNull
     private long debitAccount;
 
-    //@NotNull
+    @NotNull
     private long creditAccount;
 
     private Date releaseAt;
