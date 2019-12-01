@@ -7,6 +7,8 @@ import okhttp3.Route;
 
 import java.io.IOException;
 
+import static com.finastra.vaoo.client.ffdc.config.FFDCConstants.AUTH_HEADER;
+
 public class TokenRefreshService implements Authenticator {
 
     @Override
@@ -15,7 +17,7 @@ public class TokenRefreshService implements Authenticator {
             return response
                     .request()
                     .newBuilder()
-                    .header("Authorization", new AuthService().refresh().getToken())
+                    .header(AUTH_HEADER, new AuthService().refresh().getToken())
                     .build();
         } else {
             return null;
