@@ -1,12 +1,13 @@
 package com.finastra.vaoo.web.mappers.payment;
 
 import com.finastra.vaoo.domain.payment.Payment;
+import com.finastra.vaoo.web.mappers.VirtualAccountMapper;
 import com.finastra.vaoo.web.model.payment.PaymentDto;
 import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper (componentModel = "spring")
+@Mapper (componentModel = "spring",uses = VirtualAccountMapper.class )
 public interface PaymentMapper {
 
     PaymentDto toDto (Payment payment);
