@@ -26,6 +26,6 @@ public class SecurityConfig implements WebMvcConfigurer {
                 }
                 return isValid;
             }
-        }).excludePathPatterns("/actuator/**","/swagger-ui.html**");
+        }).excludePathPatterns("/actuator/**","/swagger-ui.html");
     }
 }
