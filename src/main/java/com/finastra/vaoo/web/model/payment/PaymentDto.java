@@ -1,5 +1,6 @@
 package com.finastra.vaoo.web.model.payment;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.finastra.vaoo.domain.payment.Status;
 import lombok.*;
@@ -15,8 +16,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Component
-@Data
 @Builder
+@Data
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
@@ -26,30 +27,25 @@ public class PaymentDto {
     private long id;
 
     @NotBlank
-    @JsonProperty
     private String reference;
 
     @PositiveOrZero
-    @JsonProperty
-    private BigDecimal amount;
+      private BigDecimal amount;
 
     @NotBlank
     @Pattern(regexp = "[A-Z]{3}")
-    @JsonProperty
     private String currency;
 
     @NotNull
-    @JsonProperty
     private long debitAccount;
 
     @NotNull
-    @JsonProperty
     private long creditAccount;
 
-    @NotNull
     @Enumerated(EnumType.ORDINAL)
-    @JsonProperty
     private Status status;
 
     private Date releaseAt;
+
+
 }

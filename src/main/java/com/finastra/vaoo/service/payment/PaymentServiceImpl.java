@@ -1,5 +1,6 @@
 package com.finastra.vaoo.service.payment;
 
+import com.finastra.vaoo.domain.payment.Status;
 import com.finastra.vaoo.repository.PaymentRepository;
 import com.finastra.vaoo.web.mappers.payment.PaymentMapper;
 import com.finastra.vaoo.web.model.payment.PaymentDto;
@@ -22,6 +23,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentDto createPayment(PaymentDto paymentDto) {
+        paymentDto.setStatus(Status.NEW);
         return paymentMapper.toDto(paymentRepository.save(paymentMapper.toEntity(paymentDto)));
     }
 
