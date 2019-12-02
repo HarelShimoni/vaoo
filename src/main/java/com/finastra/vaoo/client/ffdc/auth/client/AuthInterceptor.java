@@ -1,5 +1,6 @@
 package com.finastra.vaoo.client.ffdc.auth.client;
 
+import com.finastra.vaoo.client.ffdc.auth.exceptions.FFDCAuthentificationException;
 import com.finastra.vaoo.client.ffdc.auth.model.SecretStorage;
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -18,13 +19,17 @@ public class AuthInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
-        Request r1 = request
-                .newBuilder()
-                .addHeader(AUTH_HEADER, TOKEN_PREFIX + Optional
-                        .ofNullable(SecretStorage.getInstance().getSession().getToken())
-                        .orElseGet(() -> new AuthService().login().getToken()))
-                .addHeader(CONTENT_HEADER_KEY, CONTENT_HEADER_JSON)
-                .build();
-        return chain.proceed(r1);
+        try {
+            Request r1 = request
+                    .newBuilder()
+                    .addHeader(AUTH_HEADER, TOKEN_PREFIX + Optional
+                            .ofNullable(SecretStorage.getInstance().getSession().getToken())
+                            .orElseGet(() -> new AuthService().login().getToken()))
+                    .addHeader(CONTENT_HEADER_KEY, CONTENT_HEADER_JSON)
+                    .build();
+            return chain.proceed(r1);
+        } catch (FFDCAuthentificationException e) {
+            throw new IOException(e.getMessage());
+        }
     }
 }
