@@ -1,5 +1,6 @@
 package com.finastra.vaoo.domain.payment;
 
+import com.finastra.vaoo.domain.virtual_account.VirtualAccount;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -39,10 +41,25 @@ public class Payment {
     private String currency;
 
     @NotNull
-    private long debitAccount;
+    @OneToOne
+    private VirtualAccount debitAccount;
 
     @NotNull
-    private long creditAccount;
+    @OneToOne
+    private VirtualAccount creditAccount;
 
     private Date releaseAt;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Payment payment = (Payment) o;
+        return id == payment.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

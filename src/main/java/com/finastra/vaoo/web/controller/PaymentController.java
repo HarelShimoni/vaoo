@@ -1,6 +1,9 @@
 package com.finastra.vaoo.web.controller;
 
+import com.finastra.vaoo.repository.PaymentRepository;
+import com.finastra.vaoo.repository.VirtualAccountRepository;
 import com.finastra.vaoo.service.payment.PaymentService;
+import com.finastra.vaoo.web.mappers.payment.PaymentMapper;
 import com.finastra.vaoo.web.model.payment.PaymentDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

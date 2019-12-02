@@ -1,8 +1,7 @@
 package com.finastra.vaoo.web.model.payment;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.finastra.vaoo.domain.payment.Status;
+import com.finastra.vaoo.web.model.virtual_account.VirtualAccountDto;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
