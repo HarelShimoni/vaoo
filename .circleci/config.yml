@@ -44,20 +44,20 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
       # run tests!
-      - run: mvn integration-test
+      - run: mvn package -DskipTests
 
       - setup_remote_docker:
           docker_layer_caching: false #DLC is a paid feature
 
-      - run:
-          name: Build and push Docker image
-          command: |
-                docker build -t minimingus/fusion-pay:latest .
-                echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-                docker push minimingus/fusion-pay:latest
+#      - run:
+#          name: Build and push Docker image
+#          command: |
+#                docker build -t minimingus/fusion-pay:latest .
+#                echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
+#                docker push minimingus/fusion-pay:latest
   deploy:
-    docker:
-      - image: buildpack-deps:trusty
+    machine:
+      image: circleci/classic:latest
     steps:
       - checkout
       - run:
