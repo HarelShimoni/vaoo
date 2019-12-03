@@ -20,34 +20,32 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler (value = {EntityNotFoundException.class, EmptyResultDataAccessException.class})
     protected ResponseEntity<Object> handleConflict(
             RuntimeException ex, WebRequest request) {
-        String bodyOfResponse = Optional.ofNullable(ex.getMessage()).orElse("Entity was not found");
-        //String bodyOfResponse = "Entity was not found";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        return handleExceptionInternal(ex, bodyOfResponse,
-                headers, HttpStatus.NOT_FOUND, request);
+        return resUtil(ex, HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler (value = {SecurityException.class})
     protected ResponseEntity<Object> handleConflictSecurity(
             RuntimeException ex, WebRequest request) {
-        String bodyOfResponse = String.format(ex.getMessage());
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        return handleExceptionInternal(ex, bodyOfResponse,
-                headers, HttpStatus.UNAUTHORIZED, request);
+        return resUtil(ex, HttpStatus.UNAUTHORIZED, request);
     }
 
     @ExceptionHandler (value = {MissingRequestHeaderException.class})
     protected ResponseEntity<Object> handleMissingHeaderProperty(RuntimeException ex, WebRequest request) {
-        String bodyOfResponse = String.format(ex.getMessage());
+        return resUtil(ex, HttpStatus.BAD_REQUEST, request);
+    }
 
+    private ResponseEntity<Object> resUtil (RuntimeException ex, HttpStatus status,  WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        return handleExceptionInternal(ex, bodyOfResponse,
-                headers, HttpStatus.BAD_REQUEST, request);
+        if (status == HttpStatus.NOT_FOUND) {
+            String bodyOfResponse = Optional.ofNullable(ex.getMessage()).orElse("Entity was not found");
+            return handleExceptionInternal(ex, bodyOfResponse,
+                headers, status, request);
+        } else {
+            String bodyOfResponse = String.format(ex.getMessage());
+            return handleExceptionInternal(ex, bodyOfResponse,
+                headers, status, request);
+        }
     }
 }
 
